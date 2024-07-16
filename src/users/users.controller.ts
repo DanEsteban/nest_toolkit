@@ -3,10 +3,10 @@ import { Users } from '@prisma/client';
 import { UsersService } from "./users.service";
 import { CreateUserRequestDto } from "./dtos/users.dto";
 import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
-import { UniqueConstraintFilter } from "src/share/filters/unique-constraint.filter";
+import { PrismaExceptionFilter } from "src/share/filters/unique-constraint.filter";
 
 @ApiTags('users')
-@UseFilters(UniqueConstraintFilter)
+@UseFilters(PrismaExceptionFilter)
 @Controller('users')
 export class UserController {
      
