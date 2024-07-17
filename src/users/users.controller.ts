@@ -2,6 +2,7 @@ import { Body, Controller, HttpCode, Param, Post, Put, Delete, UseFilters, Valid
 import { Users } from '@prisma/client';
 import { UsersService } from "./users.service";
 import { CreateUserRequestDto } from "./dtos/users.dto";
+import { UpdateUserRequestDto } from "./dtos/update.user.dto";
 import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { PrismaExceptionFilter } from "src/share/filters/unique-constraint.filter";
 import { LoginUserRequestDto } from "./dtos/login.dto";
@@ -39,7 +40,7 @@ export class UserController {
      @ApiResponse({ status: 404, description: 'User not found' })
      @ApiResponse({ status: 400, description: 'Validation failed' })
      @Put(":id")
-     async updateUser(@Param('id') id: string, @Body(new ValidationPipe()) createUserDto: CreateUserRequestDto): Promise<Users> {
+     async updateUser(@Param('id') id: string, @Body(new ValidationPipe()) createUserDto: UpdateUserRequestDto): Promise<Users> {
           const userId = parseInt(id);
           return this.usersService.updateUser(userId, createUserDto);
      }

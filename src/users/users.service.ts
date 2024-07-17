@@ -68,6 +68,8 @@ export class UsersService {
         user = {...user, password: hashPassword}
       }
 
+        delete user.role;
+
       return this.prisma.users.update({
         where: { id },
         data: user

@@ -4,16 +4,20 @@ import { UserRoles } from 'src/share/enums/roles.enums';
 
 export class UpdateUserRequestDto {
      @ApiProperty({ example: 'john.doe@example.com', description: 'The email of the user' })
+     @IsString()
+     @IsNotEmpty() 
      @IsOptional()
      email?: string;
 
      @ApiProperty({ example: 'Daniel', description: 'The name of the user' })
-     @IsString() 
+     @IsString()
+     @IsNotEmpty()  
      @IsOptional()  
      name?: string;
 
      @ApiProperty({ example: 'Velasco', description: 'The lastname of the user' })
      @IsString()
+     @IsNotEmpty() 
      @IsOptional()    
      lastname?: string;
 
@@ -27,4 +31,9 @@ export class UpdateUserRequestDto {
      @IsBoolean()
      @IsOptional()
      active?: boolean;  
+
+     @IsOptional()
+     @IsString()
+     @IsIn([UserRoles.User, UserRoles.Admin])
+     role: UserRoles;
 }
