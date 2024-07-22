@@ -1,8 +1,8 @@
-import { Body, Controller, HttpCode, Param, Post, Put, Delete, UseFilters, ValidationPipe } from "@nestjs/common";
+import { Body, Controller, HttpCode, Param, Post, Put, Delete, UseFilters, ValidationPipe, Get } from "@nestjs/common";
 import { Users } from '@prisma/client';
 import { UsersService } from "./users.service";
-import { CreateUserRequestDto } from "./dtos/users.dto";
-import { UpdateUserRequestDto } from "./dtos/update.user.dto";
+import { CreateUserRequestDto } from "./dtos/create.users.dto";
+import { UpdateUserRequestDto } from "./dtos/update.users.dto";
 import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { PrismaExceptionFilter } from "src/share/filters/unique-constraint.filter";
 import { LoginUserRequestDto } from "./dtos/login.dto";
@@ -14,6 +14,22 @@ export class UserController {
      
      constructor(private readonly usersService: UsersService) { }
      
+     @ApiOperation({ summary: 'Show User' })
+     @HttpCode(200)
+     @ApiResponse({ status: 200, description: 'Successfully' })
+     @Get(':id')
+     async findOneUser(@Param('id') id: string){  
+          return this.usersService.getOneUser(Number(id));
+     }
+     
+     @ApiOperation({ summary: 'Show Users' })
+     @HttpCode(200)
+     @ApiResponse({ status: 200, description: 'Successfully' })
+     @Get()
+     async getAllUser(){  
+          return this.usersService.getAllUser();
+     }
+
      @ApiOperation({ summary: 'Create a new user' })
      @ApiResponse({ status: 201, description: 'The user has been successfully created.' })
      @ApiResponse({ status: 400, description: 'Bad Request.' })

@@ -1,15 +1,27 @@
 // src/users/users.service.ts
 import { ConflictException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { PrismaService } from '../share/services/prisma.service';
-import { CreateUserRequestDto } from './dtos/users.dto';
+import { CreateUserRequestDto } from './dtos/create.users.dto';
 import { Users } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 import { LoginUserRequestDto } from './dtos/login.dto';
-import { UpdateUserRequestDto } from './dtos/update.user.dto';
+import { UpdateUserRequestDto } from './dtos/update.users.dto';
 
 @Injectable()
 export class UsersService {
   constructor(private readonly prisma: PrismaService) {}
+
+  async getAllUser():Promise<Users[]>{
+    return this.prisma.users.findMany();
+  }
+
+  async getOneUser(id: number):Promise<Users>{
+    return this.prisma.users.findUnique({
+      where: {
+        id: id,
+      }
+    });
+  }
 
   async createUser(createUserDto: CreateUserRequestDto): Promise<Users> {
     try {
