@@ -1,4 +1,4 @@
-import { Body, Controller, HttpCode, Param, Post, Put, Delete, UseFilters, ValidationPipe, Get } from "@nestjs/common";
+import { Body, Controller, HttpCode, Param, Post, Put, Delete, UseFilters, ValidationPipe, Get, UseGuards } from "@nestjs/common";
 import { Users } from '@prisma/client';
 import { UsersService } from "./users.service";
 import { CreateUserRequestDto } from "./dtos/create.users.dto";
@@ -6,6 +6,7 @@ import { UpdateUserRequestDto } from "./dtos/update.users.dto";
 import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { PrismaExceptionFilter } from "src/share/filters/unique-constraint.filter";
 import { LoginUserRequestDto } from "./dtos/login.dto";
+import { AuthGuard } from "@nestjs/passport";
 
 @ApiTags('users')
 @UseFilters(PrismaExceptionFilter)
@@ -14,6 +15,7 @@ export class UserController {
      
      constructor(private readonly usersService: UsersService) { }
      
+     @UseGuards(AuthGuard('jwt'))
      @ApiOperation({ summary: 'Show User' })
      @HttpCode(200)
      @ApiResponse({ status: 200, description: 'Successfully' })
@@ -22,6 +24,7 @@ export class UserController {
           return this.usersService.getOneUser(Number(id));
      }
      
+     @UseGuards(AuthGuard('jwt'))
      @ApiOperation({ summary: 'Show Users' })
      @HttpCode(200)
      @ApiResponse({ status: 200, description: 'Successfully' })
@@ -29,6 +32,7 @@ export class UserController {
      async getAllUser(){  
           return this.usersService.getAllUser();
      }
+
 
      @ApiOperation({ summary: 'Create a new user' })
      @ApiResponse({ status: 201, description: 'The user has been successfully created.' })
@@ -40,6 +44,7 @@ export class UserController {
           return this.usersService.createUser(createUserDto);
      }
 
+
      @ApiOperation({ summary: 'Login User' })
      @HttpCode(200)
      @ApiResponse({ status: 200, description: 'Login Successfull' })
@@ -50,6 +55,7 @@ export class UserController {
           return this.usersService.loginUser(loginUserDto);
      }
 
+     @UseGuards(AuthGuard('jwt'))
      @ApiOperation({ summary: 'Update User' })
      @HttpCode(200)
      @ApiResponse({ status: 200, description: 'Update Successfully' })
@@ -61,6 +67,7 @@ export class UserController {
           return this.usersService.updateUser(userId, createUserDto);
      }
 
+     @UseGuards(AuthGuard('jwt'))
      @Delete(":id")
      async deleUser(@Param('id') id: string){
           return this.usersService.deleteUser(Number(id))

@@ -6,10 +6,11 @@ import { Users } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 import { LoginUserRequestDto } from './dtos/login.dto';
 import { UpdateUserRequestDto } from './dtos/update.users.dto';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class UsersService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService, private readonly jwtService: JwtService) {}
 
   async getAllUser():Promise<Users[]>{
     return this.prisma.users.findMany();
@@ -49,6 +50,10 @@ export class UsersService {
 
   }
 
+  async generateJwtToken(payload: any): Promise<string> {
+    return this.jwtService.sign(payload);
+  }
+
   async loginUser(loginUserDto: LoginUserRequestDto): Promise<Users>{
     try {
       const { email, password} = loginUserDto;
@@ -60,7 +65,11 @@ export class UsersService {
       const match  = await bcrypt.compare(password, currentPassword);
       
       if(match){
-        return currentUser;
+        const payload = { userId: currentUser.id };
+        const token = await this.generateJwtToken(payload);
+        const updateUser = await this.prisma.users.update({ where: {id: currentUser.id}, data: {tokens: `${currentUser.tokens}, {token}`}})
+        return updateUser
+
       }else{
         throw new UnauthorizedException('Invalid credentials, the password does not match');
       }

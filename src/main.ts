@@ -7,6 +7,9 @@ import { ConfigService } from '@nestjs/config';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  const configService = app.get(ConfigService);
+
   const config = new DocumentBuilder()
     .setTitle('API Documentation')
     .setDescription('The API description')
@@ -20,8 +23,8 @@ async function bootstrap() {
   
   // Habilitar CORS
   app.enableCors({
-    origin: ConfigService.get<string>('FRONTEND_URL'), // Origen permitido (tu frontend)
-    methods: ConfigService.get<string>('FRONTEND_METHODS'),
+    origin: configService.get<string>('FRONTEND_URL'), // Origen permitido (tu frontend)
+    methods: configService.get<string>('FRONTEND_METHODS'),
     allowedHeaders: 'Content-Type, Accept, Authorization',
     credentials: true,
   });

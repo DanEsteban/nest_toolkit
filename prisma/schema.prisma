@@ -21,6 +21,7 @@ model Users {
   role                      Role                         @default(USER)
   password                  String                       @db.VarChar(250)
   active                    Boolean                      @default(true)
+  tokens                      String                       @db.VarChar(250)
 }
 
 enum Role {
