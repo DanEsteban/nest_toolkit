@@ -14,7 +14,7 @@ async function bootstrap() {
     .setTitle('API Documentation')
     .setDescription('The API description')
     .setVersion('1.0')
-    .addTag('API')
+    .addTag('users')
     .build();
   //se puede cambiar la ruta con otro nombre de ser necesario
   const document = SwaggerModule.createDocument(app, config);

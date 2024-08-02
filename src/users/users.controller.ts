@@ -50,7 +50,7 @@ export class UserController {
      @ApiResponse({ status: 200, description: 'Login Successfull' })
      @ApiResponse({ status: 401, description: 'Not authorized' })
      @Post("/login")
-     async loginUser(@Body(new ValidationPipe()) loginUserDto: LoginUserRequestDto): Promise<Users> {
+     async loginUser(@Body(new ValidationPipe()) loginUserDto: LoginUserRequestDto): Promise<Partial<Users>> {
           
           return this.usersService.loginUser(loginUserDto);
      }

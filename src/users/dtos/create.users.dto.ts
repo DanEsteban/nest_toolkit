@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString, IsNotEmpty, IsBoolean, IsIn } from 'class-validator';
+import { IsString, IsNotEmpty, IsBoolean, IsIn, IsOptional } from 'class-validator';
 import { UserRoles } from 'src/share/enums/roles.enums';
 
 export class CreateUserRequestDto {
@@ -10,11 +10,13 @@ export class CreateUserRequestDto {
 
      @ApiProperty({ example: 'Daniel', description: 'The name of the user' })
      @IsString()   
-     name: string;
+     @IsOptional()   
+     name?: string;
 
      @ApiProperty({ example: 'Velasco', description: 'The lastname of the user' })
-     @IsString()    
-     lastname: string;
+     @IsString()
+     @IsOptional()       
+     lastname?: string;
 
      @ApiProperty({ example: 'USER or ADMIN', description: 'The role of the user' })
      @IsString()
@@ -29,5 +31,10 @@ export class CreateUserRequestDto {
      
      @ApiProperty({ example: true, description: 'if the user is active or no' })
      @IsBoolean()
-     active: boolean;  
+     active: boolean;
+     
+     @IsString()
+     @IsOptional()   
+     tokens?: string;
+     
 }
