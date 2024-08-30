@@ -62,9 +62,9 @@ export class UserController {
      @ApiResponse({ status: 404, description: 'User not found' })
      @ApiResponse({ status: 400, description: 'Validation failed' })
      @Put(":id")
-     async updateUser(@Param('id') id: string, @Body(new ValidationPipe()) createUserDto: UpdateUserRequestDto): Promise<Users> {
+     async updateUser(@Param('id') id: string, @Body(new ValidationPipe()) updateUserDto: UpdateUserRequestDto): Promise<Users> {
           const userId = parseInt(id);
-          return this.usersService.updateUser(userId, createUserDto);
+          return this.usersService.updateUser(userId, updateUserDto);
      }
 
      @UseGuards(AuthGuard('jwt'))
