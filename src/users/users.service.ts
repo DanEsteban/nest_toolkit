@@ -20,11 +20,11 @@ export class UsersService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async getAllUser(): Promise<Users[]> {
+  async getAllUser(){
     return this.prisma.users.findMany();
   }
 
-  async getOneUser(id: number): Promise<Users> {
+  async getOneUser(id: number){
     return this.prisma.users.findUnique({
       where: {
         id: id,
@@ -32,7 +32,7 @@ export class UsersService {
     });
   }
 
-  async createUser(createUserDto: CreateUserRequestDto): Promise<Users> {
+  async createUser(createUserDto: CreateUserRequestDto){
     try {
       /*Primera forma de hacer
       const { email, name, lastname, role, password, active } = createUserDto;
@@ -66,11 +66,11 @@ export class UsersService {
     }
   }
 
-  async generateJwtToken(payload: any): Promise<string> {
+  async generateJwtToken(payload: any) {
     return this.jwtService.sign(payload);
   }
 
-  async loginUser(loginUserDto: LoginUserRequestDto): Promise<Partial<Users>> {
+  async loginUser(loginUserDto: LoginUserRequestDto){
     try {
       const { email, password } = loginUserDto;
       const currentUser = await this.prisma.users.findUnique({
@@ -82,8 +82,11 @@ export class UsersService {
       const currentPassword = currentUser.password;
       const match = await bcrypt.compare(password, currentPassword);
       const now = DateTime.now();
+      const futureTime  = now.plus({ hours: 1 });
       const iatTimeStamp = now.toMillis();
+      const expTimeStamp = futureTime.toMillis();
       
+      console.log(iatTimeStamp, expTimeStamp)
 
       if (match) {
         const payload = {
@@ -91,6 +94,7 @@ export class UsersService {
           // name: currentUser.name,
           // role: currentUser.role,
           iat: iatTimeStamp, //Initail Access Token
+          exp: expTimeStamp,
         };
         const token = await this.generateJwtToken(payload);
         const updateUser = await this.prisma.users.update({
@@ -122,7 +126,7 @@ export class UsersService {
   async updateUser(
     id: number,
     updateUserDto: UpdateUserRequestDto,
-  ): Promise<Users> {
+  ) {
     try {
       let user = updateUserDto;
       const { password } = user;
@@ -143,7 +147,7 @@ export class UsersService {
     }
   }
 
-  async deleteUser(id: number): Promise<Users> {
+  async deleteUser(id: number){
     try {
       return this.prisma.users.delete({
         where: {

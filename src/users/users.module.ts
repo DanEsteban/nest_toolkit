@@ -11,7 +11,7 @@ import { JwtModule } from '@nestjs/jwt';
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.register({
       secret: process.env.JWT_KEY_PUBLIC, // Replace with your own secret
-      signOptions: { expiresIn: '1h' }, // Token expiration time
+      //signOptions: { expiresIn: '1h' }, // Token expiration time
     }),
   ],
   providers: [UsersService],

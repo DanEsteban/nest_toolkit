@@ -33,7 +33,6 @@ export class UserController {
           return this.usersService.getAllUser();
      }
 
-
      @ApiOperation({ summary: 'Create a new user' })
      @ApiResponse({ status: 201, description: 'The user has been successfully created.' })
      @ApiResponse({ status: 400, description: 'Bad Request.' })
@@ -43,7 +42,6 @@ export class UserController {
           
           return this.usersService.createUser(createUserDto);
      }
-
 
      @ApiOperation({ summary: 'Login User' })
      @HttpCode(200)
@@ -69,10 +67,7 @@ export class UserController {
 
      @UseGuards(AuthGuard('jwt'))
      @Delete(":id")
-     async deleUser(@Param('id') id: string){
+     async deleUser(@Param('id') id: string): Promise<Users>{
           return this.usersService.deleteUser(Number(id))
      }
-
-
-
 }
